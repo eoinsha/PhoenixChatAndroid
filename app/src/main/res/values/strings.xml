@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">ChatSample</string>
+    <string name="app_name">Phoenix Channels Chat</string>
+    <string name="title_activity_chat">ChatActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_send">Send</string>
 </resources>
