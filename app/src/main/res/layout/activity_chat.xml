@@ -9,7 +9,7 @@
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
+        android:id="@+id/messages_list_view"
         android:layout_alignParentTop="true"
         android:layout_above="@+id/message_entry"
         android:transcriptMode="alwaysScroll"/>
@@ -28,7 +28,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
             android:hint="New Message"
-            android:id="@+id/textView"
+            android:id="@+id/message_text"
             android:autoText="false"
             android:enabled="true" />
 
@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/action_send"
-            android:id="@+id/button" />
+            android:id="@+id/button_send" />
     </LinearLayout>
 
 </RelativeLayout>
