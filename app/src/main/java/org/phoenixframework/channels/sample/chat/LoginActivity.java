@@ -39,6 +39,7 @@ public class LoginActivity extends Activity  {
 
         // Set up the login form.
         mUrlView = (AutoCompleteTextView) findViewById(R.id.url);
+        mUrlView.setText(utils.getUrl());
 
         mTopicView = (EditText) findViewById(R.id.topic);
         mTopicView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -51,6 +52,7 @@ public class LoginActivity extends Activity  {
                 return false;
             }
         });
+        mTopicView.setText(utils.getTopic());
 
         Button mEmailSignInButton = (Button) findViewById(R.id.sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
