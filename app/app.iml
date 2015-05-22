@@ -88,12 +88,13 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 22 Platform (1)" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="jackson-mapper-asl-1.8.5" level="project" />
     <orderEntry type="library" exported="" name="okhttp-2.4.0-RC1" level="project" />
+    <orderEntry type="library" exported="" name="jackson-core-2.5.3" level="project" />
     <orderEntry type="library" exported="" name="JavaPhoenixChannels-0.1.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" exported="" name="jackson-core-asl-1.8.5" level="project" />
+    <orderEntry type="library" exported="" name="jackson-annotations-2.5.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-22.1.1" level="project" />
     <orderEntry type="library" exported="" name="support-v4-22.1.1" level="project" />
+    <orderEntry type="library" exported="" name="jackson-databind-2.5.3" level="project" />
     <orderEntry type="library" exported="" name="okio-1.4.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.1.1" level="project" />
     <orderEntry type="library" exported="" name="okhttp-ws-2.4.0-RC1" level="project" />

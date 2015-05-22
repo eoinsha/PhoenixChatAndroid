@@ -12,7 +12,9 @@
         android:id="@+id/messages_list_view"
         android:layout_alignParentTop="true"
         android:layout_above="@+id/message_entry"
-        android:transcriptMode="alwaysScroll"/>
+        android:transcriptMode="alwaysScroll"
+        android:layout_marginBottom="10dp"/>
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"

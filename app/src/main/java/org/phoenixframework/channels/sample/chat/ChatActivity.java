@@ -4,6 +4,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -27,6 +28,7 @@ import org.phoenixframework.channels.sample.chat.org.phoenixframework.channels.s
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ChatActivity extends AppCompatActivity {
     private static final String TAG = ChatActivity.class.getSimpleName();
@@ -50,6 +52,8 @@ public class ChatActivity extends AppCompatActivity {
         btnSend.setEnabled(false);
         messageField = (EditText) findViewById(R.id.message_text);
         messagesListView = (ListView) findViewById(R.id.messages_list_view);
+        messagesListView.setDivider(null);
+        messagesListView.setDividerHeight(0);
         listAdapter = new MessageArrayAdapter(this, android.R.layout.simple_list_item_1);
         messagesListView.setAdapter(listAdapter);
 
@@ -67,23 +71,29 @@ public class ChatActivity extends AppCompatActivity {
                     channel = socket.chan(topic, null);
 
                     try {
-                        channel.join().receive("messages", new IMessageCallback() {
+                        channel.join().receive("ok", new IMessageCallback() {
                             @Override
                             public void onMessage(final Envelope envelope) {
-                                final List<String> messages = (List<String>)envelope.getPayload().get("body");
-                                Log.i(TAG, "MESSAGES: " + messages);
-                                for(final String message : messages) {
-                                    listAdapter.add(message);
-                                }
+                                addToList("You have joined '" + topic + "'");
                             }
                         });
-
-                        channel.join().receive("new_msg", new IMessageCallback() {
+                        channel.on("message_feed", new IMessageCallback() {
                             @Override
-                            public void onMessage(Envelope envelope) {
-                                final String messageText = (String)envelope.getPayload().get("body");
+                            public void onMessage(final Envelope envelope) {
+                                final List<Map> messages = (List<Map>) envelope.getPayload().get("messages");
+                                Log.i(TAG, "MESSAGES: " + messages);
+                                if(messages != null) {
+                                    for (final Map<String, Object> message : messages) {
+                                        addToList((String)message.get("body"));
+                                    }
+                                }
+                            }
+                        }).on("new_msg", new IMessageCallback() {
+                            @Override
+                            public void onMessage(final Envelope envelope) {
+                                final String messageText = (String) envelope.getPayload().get("body");
                                 Log.i(TAG, "MESSAGES: " + messageText);
-                                listAdapter.add(messageText);
+                                addToList(messageText);
                             }
                         });
                     } catch (Exception e) {
@@ -97,22 +107,27 @@ public class ChatActivity extends AppCompatActivity {
                             messageField.setText("");
                         }
                     });
-                    btnSend.setEnabled(true);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            btnSend.setEnabled(true);
+                        }
+                    });
                 }
             })
-            .onClose(new ISocketCloseCallback() {
-                @Override
-                public void onClose() {
-                    showToast("Closed");
-                }
-            })
-            .onError(new IErrorCallback() {
-                @Override
-                public void onError(final String reason) {
-                    handleTerminalError(reason);
-                }
-            })
-            .connect();
+                    .onClose(new ISocketCloseCallback() {
+                        @Override
+                        public void onClose() {
+                            showToast("Closed");
+                        }
+                    })
+                    .onError(new IErrorCallback() {
+                        @Override
+                        public void onError(final String reason) {
+                            handleTerminalError(reason);
+                        }
+                    })
+                    .connect();
 
         } catch (Exception e) {
             Log.e(TAG, "Failed to connect", e);
@@ -152,7 +167,9 @@ public class ChatActivity extends AppCompatActivity {
                         .receive("ok", new IMessageCallback() {
                             @Override
                             public void onMessage(Envelope envelope) {
-                                Log.i(TAG, "MESSAGE[ME]: " + envelope.getPayload().get("body"));
+                                final String body = (String) envelope.getPayload().getResponse().get("body");
+                                Log.i(TAG, "MESSAGE[ME]: " + body);
+                                addToList("ME " + body);
                             }
                         })
                         .after(500, new Runnable() {
@@ -179,8 +196,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void notifyMessageReceived() {
         try {
-            Uri notification = RingtoneManager
-                    .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
             r.play();
         } catch (Exception e) {
@@ -193,7 +209,17 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void handleTerminalError(final String s) {
-        listAdapter.add(s);
+        addToList(s);
         showToast(s);
+    }
+
+    private void addToList(final String s) {
+        runOnUiThread(new Runnable() {
+                          @Override
+                          public void run() {
+                              listAdapter.add(s);
+                          }
+                      }
+        );
     }
 }
