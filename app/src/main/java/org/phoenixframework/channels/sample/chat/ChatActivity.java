@@ -4,11 +4,9 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +31,6 @@ import java.util.Map;
 public class ChatActivity extends AppCompatActivity {
     private static final String TAG = ChatActivity.class.getSimpleName();
 
-    private Utils utils;
     private Button btnSend;
     private EditText messageField;
     private ListView messagesListView;
@@ -48,6 +45,9 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.chat_toolbar);
+        setSupportActionBar(toolbar);
+
         btnSend = (Button) findViewById(R.id.button_send);
         btnSend.setEnabled(false);
         messageField = (EditText) findViewById(R.id.message_text);
@@ -57,7 +57,7 @@ public class ChatActivity extends AppCompatActivity {
         listAdapter = new MessageArrayAdapter(this, android.R.layout.simple_list_item_1);
         messagesListView.setAdapter(listAdapter);
 
-        utils = new Utils(getApplicationContext());
+        Utils utils = new Utils(getApplicationContext());
         final String url = utils.getUrl();
         final String topic = utils.getTopic();
 
@@ -83,7 +83,7 @@ public class ChatActivity extends AppCompatActivity {
                                 final List<Map> messages = (List<Map>) envelope.getPayload().get("messages");
                                 Log.i(TAG, "MESSAGES: " + messages);
                                 if(messages != null) {
-                                    for (final Map<String, Object> message : messages) {
+                                    for (final Map< String, Object> message : messages) {
                                         addToList((String)message.get("body"));
                                     }
                                 }
@@ -94,6 +94,7 @@ public class ChatActivity extends AppCompatActivity {
                                 final String messageText = (String) envelope.getPayload().get("body");
                                 Log.i(TAG, "MESSAGES: " + messageText);
                                 addToList(messageText);
+                                notifyMessageReceived();
                             }
                         });
                     } catch (Exception e) {
@@ -133,28 +134,6 @@ public class ChatActivity extends AppCompatActivity {
             Log.e(TAG, "Failed to connect", e);
             handleTerminalError(e);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_chat, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void sendMessage() {
