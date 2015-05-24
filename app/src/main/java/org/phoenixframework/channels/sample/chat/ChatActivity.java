@@ -24,9 +24,12 @@ import org.phoenixframework.channels.Socket;
 import org.phoenixframework.channels.sample.chat.org.phoenixframework.channels.sample.util.Utils;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class ChatActivity extends AppCompatActivity {
     private static final String TAG = ChatActivity.class.getSimpleName();
@@ -38,7 +41,7 @@ public class ChatActivity extends AppCompatActivity {
     private Socket socket;
     private Channel channel;
 
-    private List<Envelope> messages = new ArrayList<>();
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +77,7 @@ public class ChatActivity extends AppCompatActivity {
                         channel.join().receive("ok", new IMessageCallback() {
                             @Override
                             public void onMessage(final Envelope envelope) {
-                                addToList("You have joined '" + topic + "'");
+                                showToast("You have joined '" + topic + "'");
                             }
                         });
                         channel.on("message_feed", new IMessageCallback() {
@@ -83,17 +86,18 @@ public class ChatActivity extends AppCompatActivity {
                                 final List<Map> messages = (List<Map>) envelope.getPayload().get("messages");
                                 Log.i(TAG, "MESSAGES: " + messages);
                                 if(messages != null) {
-                                    for (final Map< String, Object> message : messages) {
-                                        addToList((String)message.get("body"));
+                                    for (final Map< String, Object> messageFields : messages) {
+                                        final ReceivedMessage message = getMessage(messageFields);
+                                        addToList(message);
                                     }
                                 }
                             }
                         }).on("new_msg", new IMessageCallback() {
                             @Override
                             public void onMessage(final Envelope envelope) {
-                                final String messageText = (String) envelope.getPayload().get("body");
-                                Log.i(TAG, "MESSAGES: " + messageText);
-                                addToList(messageText);
+                                final ReceivedMessage message = getMessage(envelope.getPayload().getAll());
+                                Log.i(TAG, "MESSAGES: " + message);
+                                addToList(message);
                                 notifyMessageReceived();
                             }
                         });
@@ -146,9 +150,10 @@ public class ChatActivity extends AppCompatActivity {
                         .receive("ok", new IMessageCallback() {
                             @Override
                             public void onMessage(Envelope envelope) {
-                                final String body = (String) envelope.getPayload().getResponse().get("body");
-                                Log.i(TAG, "MESSAGE[ME]: " + body);
-                                addToList("ME " + body);
+                                final ReceivedMessage message = getMessage(envelope.getPayload().getResponse());
+                                message.setFromMe(true);
+                                Log.i(TAG, "MESSAGE: " + message);
+                                addToList(message);
                             }
                         })
                         .after(500, new Runnable() {
@@ -162,6 +167,18 @@ public class ChatActivity extends AppCompatActivity {
                 showToast("Failed to send");
             }
         }
+    }
+
+    private ReceivedMessage getMessage(final Map<String, Object> messageFields) {
+        final String messageText = (String) messageFields.get("body");
+        Date msgDate = null;
+        try {
+            msgDate = dateFormat.parse((String) messageFields.get("inserted_at"));
+        } catch (ParseException e) {
+            // Ignore
+            Log.e(TAG, "", e);
+        }
+        return new ReceivedMessage(messageText, msgDate);
     }
 
     private void showToast(final String toastText) {
@@ -188,15 +205,15 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void handleTerminalError(final String s) {
-        addToList(s);
+//        addToList(s, null);
         showToast(s);
     }
 
-    private void addToList(final String s) {
+    private void addToList(final ReceivedMessage message) {
         runOnUiThread(new Runnable() {
                           @Override
                           public void run() {
-                              listAdapter.add(s);
+                              listAdapter.add(message);
                           }
                       }
         );
