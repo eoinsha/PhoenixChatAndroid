@@ -29,17 +29,17 @@ public class MessageArrayAdapter extends ArrayAdapter<ReceivedMessage> {
         messageContainer = (LinearLayout) row.findViewById(R.id.messageContainer);
         final ReceivedMessage message = getItem(position);
         textView = (TextView) row.findViewById(R.id.singleMessageText);
-        textView.setText(message.getText());
+        textView.setText(message.getBody());
         msgDateLabel = (TextView) row.findViewById(R.id.messageDate);
-        if(message.getMsgDate() != null) {
+        if(message.getInsertedDate() != null) {
             msgDateLabel.setVisibility(View.VISIBLE);
-            msgDateLabel.setText(DateUtils.getRelativeTimeSpanString(message.getMsgDate().getTime()));
+            msgDateLabel.setText(DateUtils.getRelativeTimeSpanString(message.getInsertedDate().getTime()));
         }
         else {
             msgDateLabel.setVisibility(View.INVISIBLE);
         }
 
-        messageContainer.setGravity(message.getText().startsWith("ME ") ? Gravity.RIGHT : Gravity.LEFT);
+        messageContainer.setGravity(message.isFromMe() ? Gravity.RIGHT : Gravity.LEFT);
         return row;
     }
 }
