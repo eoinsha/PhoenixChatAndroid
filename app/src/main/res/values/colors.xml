@@ -6,6 +6,6 @@
     <color name="accent">#8BC34A</color>
     <color name="primary_text">#FFFFFF</color>
     <color name="secondary_text">#727272</color>
-    <color name="icons">#FFFFFF</color>
+    <color name="icons">#727272</color>
     <color name="divider">#B6B6B6</color>
 </resources>

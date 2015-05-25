@@ -21,13 +21,10 @@ public class MessageArrayAdapter extends ArrayAdapter<ReceivedMessage> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View row = convertView;
-        if (row == null) {
-            LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.message_layout, parent, false);
-        }
-        messageContainer = (LinearLayout) row.findViewById(R.id.messageContainer);
         final ReceivedMessage message = getItem(position);
+
+        LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View row = inflater.inflate(message.isFromMe() ? R.layout.my_message_layout : R.layout.message_layout, parent, false);
         textView = (TextView) row.findViewById(R.id.singleMessageText);
         textView.setText(message.getBody());
         msgDateLabel = (TextView) row.findViewById(R.id.messageDate);
@@ -38,8 +35,6 @@ public class MessageArrayAdapter extends ArrayAdapter<ReceivedMessage> {
         else {
             msgDateLabel.setVisibility(View.INVISIBLE);
         }
-
-        messageContainer.setGravity(message.isFromMe() ? Gravity.RIGHT : Gravity.LEFT);
         return row;
     }
 }

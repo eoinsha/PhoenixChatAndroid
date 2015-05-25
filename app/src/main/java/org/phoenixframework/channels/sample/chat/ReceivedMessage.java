@@ -9,8 +9,8 @@ import java.util.Date;
 class ReceivedMessage {
     private String userId;
     private String body;
-    private Date insertedDate;
-    private Date updatedDate;
+    private Date insertedDate = new Date();
+    private Date updatedDate = new Date();
     private boolean fromMe = false;
 
     @SuppressWarnings("unused")

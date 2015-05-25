@@ -207,7 +207,6 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void handleTerminalError(final String s) {
-//        addToList(s, null);
         showToast(s);
     }
 
