@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" android:gravity="right">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dip"
+        android:layout_marginLeft="10dip"
+        android:background="@drawable/my_message_shape"
+        android:padding="5dip">
+
+        <include layout="@layout/message_content_layout"/>
+    </LinearLayout>
+</LinearLayout>
