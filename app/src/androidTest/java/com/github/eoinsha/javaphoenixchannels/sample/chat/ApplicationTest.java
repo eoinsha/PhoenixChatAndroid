@@ -1,4 +1,4 @@
-package org.phoenixframework.channels.sample.chat;
+package com.github.eoinsha.javaphoenixchannels.sample.chat;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

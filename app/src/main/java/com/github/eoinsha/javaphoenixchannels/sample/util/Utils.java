@@ -1,4 +1,4 @@
-package org.phoenixframework.channels.sample.chat.org.phoenixframework.channels.sample.util;
+package com.github.eoinsha.javaphoenixchannels.sample.util;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -1,4 +1,4 @@
-package org.phoenixframework.channels.sample.chat;
+package com.github.eoinsha.javaphoenixchannels.sample.chat;
 
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.phoenixframework.channels.Channel;
@@ -24,8 +25,10 @@ import org.phoenixframework.channels.IErrorCallback;
 import org.phoenixframework.channels.IMessageCallback;
 import org.phoenixframework.channels.ISocketCloseCallback;
 import org.phoenixframework.channels.ISocketOpenCallback;
+import org.phoenixframework.channels.ITimeoutCallback;
 import org.phoenixframework.channels.Socket;
-import org.phoenixframework.channels.sample.chat.org.phoenixframework.channels.sample.util.Utils;
+
+import com.github.eoinsha.javaphoenixchannels.sample.util.Utils;
 
 import java.io.IOException;
 import java.util.Date;
@@ -78,31 +81,28 @@ public class ChatActivity extends AppCompatActivity {
                                 showToast("You have joined '" + topic + "'");
                             }
                         });
-                        channel.on("message_feed", new IMessageCallback() {
+                        channel.on("user:entered", new IMessageCallback() {
                             @Override
                             public void onMessage(final Envelope envelope) {
-                                final JsonNode messagesNode = envelope.getPayload().get("messages");
-                                if(messagesNode != null) {
-                                    try {
-                                        final ReceivedMessage[] messages = objectMapper.treeToValue(messagesNode, ReceivedMessage[].class);
-                                        for (final ReceivedMessage message : messages) {
-                                            addToList(message);
-                                        }
-                                    }
-                                    catch(JsonProcessingException e) {
-                                        Log.e(TAG, "Unable to parse messages", e);
-                                    }
+                                final JsonNode user = envelope.getPayload().get("user");
+                                if (user == null || user instanceof NullNode) {
+                                    showToast("An anonymous user entered");
+                                }
+                                else {
+                                    showToast("User '" + user.toString() + "' entered");
                                 }
                             }
-                        }).on("new_msg", new IMessageCallback() {
+                        }).on("new:msg", new IMessageCallback() {
                             @Override
                             public void onMessage(final Envelope envelope) {
-                                final ReceivedMessage message;
+                                final ChatMessage message;
                                 try {
-                                    message = objectMapper.treeToValue(envelope.getPayload(), ReceivedMessage.class);
-                                    Log.i(TAG, "MESSAGES: " + message);
-                                    addToList(message);
-                                    notifyMessageReceived();
+                                    message = objectMapper.treeToValue(envelope.getPayload(), ChatMessage.class);
+                                    Log.i(TAG, "MESSAGE: " + message);
+                                    if (message.getUserId() != null && !message.getUserId().equals("SYSTEM")) {
+                                        addToList(message);
+                                        notifyMessageReceived();
+                                    }
                                 } catch (JsonProcessingException e) {
                                     Log.e(TAG, "Unable to parse message", e);
                                 }
@@ -148,31 +148,27 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
-        final String message = messageField.getText().toString();
+        final String messageBody = messageField.getText().toString().trim();
         if (channel != null && channel.canPush()) {
             final ObjectNode payload = objectMapper.createObjectNode();
-            payload.put("body", message);
+            payload.put("body", messageBody);
             try {
                 final Date pushDate = new Date();
-                channel.push("new_msg", payload)
+                channel.push("new:msg", payload)
                         .receive("ok", new IMessageCallback() {
                             @Override
                             public void onMessage(final Envelope envelope) {
-                                final ReceivedMessage message;
-                                try {
-                                    message = objectMapper.treeToValue(envelope.getPayload().get("response"), ReceivedMessage.class);
-                                    message.setInsertedDate(pushDate);
-                                    message.setFromMe(true);
-                                    Log.i(TAG, "MESSAGE: " + message);
-                                    addToList(message);
-                                } catch (JsonProcessingException e) {
-                                    Log.e(TAG, "Unable to parse message", e);
-                                }
+                                final ChatMessage message = new ChatMessage();
+                                message.setBody(messageBody);
+                                message.setInsertedDate(pushDate);
+                                message.setFromMe(true);
+                                Log.i(TAG, "MESSAGE: " + message);
+                                addToList(message);
                             }
                         })
-                        .after(500, new Runnable() {
+                        .timeout(new ITimeoutCallback() {
                             @Override
-                            public void run() {
+                            public void onTimeout() {
                                 Log.w(TAG, "MESSAGE timed out");
                             }
                         });
@@ -210,7 +206,7 @@ public class ChatActivity extends AppCompatActivity {
         showToast(s);
     }
 
-    private void addToList(final ReceivedMessage message) {
+    private void addToList(final ChatMessage message) {
         runOnUiThread(new Runnable() {
                           @Override
                           public void run() {

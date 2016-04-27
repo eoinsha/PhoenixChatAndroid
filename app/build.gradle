@@ -4,7 +4,7 @@ android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
     defaultConfig {
-        applicationId "sample.channels.phoenixframework.org.chatsample"
+        applicationId "chat.sample.javaphoenixchannels.eoinsha.github.com"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
@@ -31,7 +31,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.1.1'
-    compile('org.phoenixframework.channels:JavaPhoenixChannels:0.1.0-SNAPSHOT') {
+    compile('com.github.eoinsha:JavaPhoenixChannels:0.1') {
         exclude module: 'groovy-all'
     }
 }

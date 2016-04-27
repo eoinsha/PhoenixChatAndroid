@@ -2,15 +2,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="2dip"
         android:background="@drawable/message_shape"
-        android:padding="5dip">
+        android:padding="5dip"
+        android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="top|right"
+            android:gravity="right">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:ems="10"
+                android:id="@+id/userText"
+                android:textColor="@color/abc_primary_text_material_light"
+                android:textStyle="bold"
+                android:padding="2dp"
+                android:layout_gravity="top|right"
+                android:gravity="right" />
+            <ImageView
+                android:id="@+id/imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@android:drawable/presence_online"
+                android:layout_gravity="right" />
+        </LinearLayout>
         <include layout="@layout/message_content_layout"/>
     </LinearLayout>
 </LinearLayout>

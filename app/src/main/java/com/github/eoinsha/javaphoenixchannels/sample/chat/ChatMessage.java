@@ -1,4 +1,4 @@
-package org.phoenixframework.channels.sample.chat;
+package com.github.eoinsha.javaphoenixchannels.sample.chat;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,18 +6,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class ReceivedMessage {
+class ChatMessage {
     private String userId;
     private String body;
     private Date insertedDate = new Date();
     private Date updatedDate = new Date();
     private boolean fromMe = false;
 
-    @SuppressWarnings("unused")
-    public ReceivedMessage() {
+    public ChatMessage() {
     }
 
-    @JsonProperty("user_id")
+    @JsonProperty("user")
     public String getUserId() {
         return userId;
     }
@@ -64,7 +63,7 @@ class ReceivedMessage {
 
     @Override
     public String toString() {
-        return "ReceivedMessage{" +
+        return "ChatMessage{" +
                 "userId='" + userId + '\'' +
                 ", body='" + body + '\'' +
                 ", insertedDate=" + insertedDate +

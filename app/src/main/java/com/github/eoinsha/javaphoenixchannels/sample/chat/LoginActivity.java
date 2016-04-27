@@ -1,4 +1,4 @@
-package org.phoenixframework.channels.sample.chat;
+package com.github.eoinsha.javaphoenixchannels.sample.chat;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.phoenixframework.channels.sample.chat.org.phoenixframework.channels.sample.util.Utils;
+import com.github.eoinsha.javaphoenixchannels.sample.util.Utils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -45,7 +45,7 @@ public class LoginActivity extends Activity  {
         mTopicView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == org.phoenixframework.channels.sample.chat.R.id.login || id == EditorInfo.IME_NULL) {
+                if (id == R.id.login || id == EditorInfo.IME_NULL) {
                     startChat();
                     return true;
                 }
@@ -84,7 +84,7 @@ public class LoginActivity extends Activity  {
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(url)) {
-            mUrlView.setError(getString(org.phoenixframework.channels.sample.chat.R.string.error_field_required));
+            mUrlView.setError(getString(R.string.error_field_required));
             focusView = mUrlView;
             cancel = true;
         } else if (!isUrlValid(url)) {

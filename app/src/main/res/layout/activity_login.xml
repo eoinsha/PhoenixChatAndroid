@@ -44,7 +44,8 @@
                     android:hint="@string/prompt_url"
                     android:inputType="textUri"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:text="@string/prompt_url" />
 
                 <EditText
                     android:id="@+id/topic"
@@ -56,7 +57,8 @@
                     android:imeOptions="actionSend"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:text="@string/default_channel" />
 
                 <Button
                     android:id="@+id/sign_in_button"
