@@ -1,9 +1,8 @@
 <resources>
 
     <!-- Strings related to login -->
-    <string name="prompt_topic">topic</string>
-    <string name="prompt_url">http://10.0.2.2:4000/socket/websocket</string>
-    <string name="default_channel">rooms:lobby</string>
+    <string name="default_topic">rooms:lobby</string>
+    <string name="default_url">https://phxchat.codespyre.com/socket/websocket</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
 

@@ -66,7 +66,7 @@ public class ChatActivity extends AppCompatActivity {
         final String topic = utils.getTopic();
 
         try {
-            socket = new Socket(url);
+            socket = new Socket(url.toString());
 
             socket.onOpen(new ISocketOpenCallback() {
                 @Override

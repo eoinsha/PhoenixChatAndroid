@@ -25,7 +25,7 @@ import java.net.URL;
 public class LoginActivity extends Activity  {
 
     // UI references.
-    private AutoCompleteTextView mUrlView;
+    private TextView mUrlView;
     private EditText mTopicView;
 
     private Utils utils = null;
@@ -38,7 +38,7 @@ public class LoginActivity extends Activity  {
         utils = new Utils(getApplicationContext());
 
         // Set up the login form.
-        mUrlView = (AutoCompleteTextView) findViewById(R.id.url);
+        mUrlView = (TextView) findViewById(R.id.url);
         mUrlView.setText(utils.getUrl());
 
         mTopicView = (EditText) findViewById(R.id.topic);
@@ -104,7 +104,7 @@ public class LoginActivity extends Activity  {
             // form field with an error.
             focusView.requestFocus();
         } else {
-            utils.storeChannelDetails(url, topic);
+            utils.storeChannelDetails(topic);
             final Intent intent = new Intent(this, ChatActivity.class);
             startActivity(intent);
         }

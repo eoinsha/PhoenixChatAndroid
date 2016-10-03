@@ -26,39 +26,39 @@
             />
 
         <ScrollView
-            android:id="@+id/login_form"
+            android:id="@+id/login_form_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:id="@+id/email_login_form"
+                android:id="@+id/login_form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
-                <AutoCompleteTextView
-                    android:id="@+id/url"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_url"
-                    android:inputType="textUri"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:text="@string/prompt_url" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/default_url"
+                    android:id="@+id/url"
+                    android:layout_gravity="top|center_horizontal"
+                    android:foreground="@color/secondary_text"
+                    android:visibility="visible"
+                    android:enabled="true" />
 
                 <EditText
                     android:id="@+id/topic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_topic"
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionSend"
                     android:inputType="text"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="@string/default_channel" />
+                    android:text="@string/default_topic" />
 
                 <Button
                     android:id="@+id/sign_in_button"

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
-    tools:context="org.phoenixframework.channels.sample.chat.ChatActivity">
+    tools:context="com.github.eoinsha.javaphoenixchannels.sample.chat.ChatActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/chat_toolbar"
