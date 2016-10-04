@@ -149,7 +149,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void sendMessage() {
         final String messageBody = messageField.getText().toString().trim();
-        if (channel != null && channel.canPush()) {
+        if (channel != null) {
             final ObjectNode payload = objectMapper.createObjectNode();
             payload.put("body", messageBody);
             try {

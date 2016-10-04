@@ -11,10 +11,12 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
-
 allprojects {
     repositories {
         mavenLocal()
+        maven {
+          url  "http://dl.bintray.com/javaphoenixchannels/java-phoenix-channels"
+        }
         jcenter()
         mavenCentral()
     }
